@@ -1,7 +1,5 @@
 package de.cyzetlc.mst;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -28,7 +26,7 @@ public class MSTracker {
             try {
                 trackServer(args[1]);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println(e.getMessage());
             }
         }, 0, 5, TimeUnit.MINUTES);
     }
