@@ -1,5 +1,10 @@
 package de.cyzetlc.mst;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -36,9 +41,9 @@ public class MSTracker {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        String json = response.body();
+        JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
 
         System.out.println("Daten empfangen am " + java.time.LocalDateTime.now());
-        System.out.println(json);
+        System.out.println(json.get("ip").getAsString());
     }
 }
