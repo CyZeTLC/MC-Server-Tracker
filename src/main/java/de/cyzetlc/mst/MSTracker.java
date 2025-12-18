@@ -2,7 +2,9 @@ package de.cyzetlc.mst;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import de.cyzetlc.mst.console.Console;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,11 +16,15 @@ import java.util.concurrent.TimeUnit;
 public class MSTracker {
     private static final String API_URL = "https://api.mcsrvstat.us/2/";
 
-    public static void main(String[] args) {
+    private static Console console;
+
+    public static void main(String[] args) throws IOException {
         if (args.length != 2 || !args[0].equals("-ip")) {
             System.err.println("Use mst -ip <SERVER_IP>");
             return;
         }
+
+        console = new Console(args);
 
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
