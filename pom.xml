@@ -29,5 +29,12 @@
             <artifactId>gson</artifactId>
             <version>2.13.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>3.26.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>
