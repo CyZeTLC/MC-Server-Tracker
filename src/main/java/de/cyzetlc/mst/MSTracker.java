@@ -3,6 +3,7 @@ package de.cyzetlc.mst;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.cyzetlc.mst.console.Console;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.net.URI;
@@ -16,9 +17,15 @@ import java.util.concurrent.TimeUnit;
 public class MSTracker {
     private static final String API_URL = "https://api.mcsrvstat.us/2/";
 
+    @Getter
     private static Console console;
 
-    public static void main(String[] args) throws IOException {
+    @Getter
+    private static MSTracker instance;
+
+    public MSTracker(String[] args) throws IOException {
+        instance = this;
+
         if (args.length != 2 || !args[0].equals("-ip")) {
             System.err.println("Use mst -ip <SERVER_IP>");
             return;
@@ -30,14 +37,14 @@ public class MSTracker {
 
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                trackServer(args[1]);
+                this.trackServer(args[1]);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
         }, 0, 5, TimeUnit.MINUTES);
     }
 
-    public static void trackServer(String ip) throws Exception {
+    public void trackServer(String ip) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL + ip))
@@ -48,6 +55,10 @@ public class MSTracker {
         JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
 
         System.out.println("Daten empfangen am " + java.time.LocalDateTime.now());
-        System.out.println(json.get("ip").getAsString());
+        System.out.println(json);
+    }
+
+    public static void main(String[] args) throws IOException {
+        instance = new MSTracker(args);
     }
 }

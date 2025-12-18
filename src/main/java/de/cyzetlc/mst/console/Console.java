@@ -1,5 +1,6 @@
 package de.cyzetlc.mst.console;
 
+import de.cyzetlc.mst.MSTracker;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
@@ -17,12 +18,13 @@ public class Console {
                 .terminal(terminal)
                 .build();
 
+
         Thread logger = new Thread(() -> {
             int i = 0;
             while (true) {
                 try {
                     Thread.sleep(2000);
-                    reader.printAbove("§7[INFO]§r Log #" + (++i));
+                    //reader.printAbove("§7[INFO]§r Log #" + (++i));
                 } catch (InterruptedException e) {
                     break;
                 }
@@ -32,11 +34,20 @@ public class Console {
         logger.start();
 
         while (true) {
-            String line = reader.readLine("> ");
+            String line = reader.readLine("$ ");
             if (line.equalsIgnoreCase("stop")) {
                 break;
             }
-            reader.printAbove("Du hast eingegeben: " + line);
+
+            if (line.startsWith("pull")) {
+                if (line.split(" ").length == 2) {
+                    try {
+                        MSTracker.getInstance().trackServer(line.split(" ")[1]);
+                    } catch (Exception e) {
+                        reader.printAbove("Error");
+                    }
+                }
+            }
         }
 
         terminal.close();
